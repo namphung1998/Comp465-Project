@@ -6,6 +6,17 @@ int main(int argc, char **argv) {
     // line args to see which config files to load.
 	ExampleApp app(argc, argv);
 
+    
+
+    // for (float x = 0.0; x < 20; x+=0.1) {
+    //     for (float y = 0.0; y < 20; y+=0.1) {
+    //         float noise = glm::perlin(glm::vec2(x, y));
+    //         std::cout << noise << std::endl;
+    //     }
+    // }
+
+    
+
     // Does not return until the program shuts down.
     app.run();
 

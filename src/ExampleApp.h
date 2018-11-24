@@ -6,6 +6,7 @@ using namespace MinVR;
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/noise.hpp>
 #include <vector>
 
 #ifdef _WIN32
@@ -59,6 +60,18 @@ private:
 	std::unique_ptr<Box> _box;
 	float _angle;
 
+    int scl = 20;
+    int w = 2000;
+    int h = 1600;
+    int cols = w / scl;
+    int rows = h /scl;
+
+    float terrain[80][100];
+
+    float flying;
+
+    // std::vector<std::vector<float>> terrain;
+
 	double _lastTime;
 	double _curFrameTime;
 
@@ -69,6 +82,14 @@ private:
 	void drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth);
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
+
+    void setupGeometry();
+
+protected:
+    std::vector< std::shared_ptr<basicgraphics::Texture> > textures;
+    std::vector<basicgraphics::Mesh::Vertex> cpuVertexArray;
+    std::vector<int> cpuIndexArray;
+    std::unique_ptr<basicgraphics::Mesh> mesh;
 };
 
 
