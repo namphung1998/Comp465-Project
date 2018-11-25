@@ -267,13 +267,13 @@ void ExampleApp::setupGeometry() {
     
     float terrain[rows][cols];
     
-    float newX = _flying * 5.0;
+    float newX = _flying;
     for(int x = 0; x < rows; x++) {
         float newY = 0.0;
         for(int y = 0; y < cols; y++) {
             
             terrain[x][y] = 4 * perlin(vec2(newX, newY));
-            cout << terrain[x][y] << endl;
+            // cout << terrain[x][y] << endl;
             newY += 0.3f;
             
         }
@@ -294,12 +294,6 @@ void ExampleApp::setupGeometry() {
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * row + col) + 1);
         }
-    }
-    
-    for(int i = 0; i < cpuIndexArray.size(); i++) {
-        
-        cout << cpuIndexArray.at(i) << endl;
-        
     }
     
 }
