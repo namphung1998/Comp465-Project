@@ -10,7 +10,7 @@
 ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
-	_angle = 0;
+	_flying = 0.0;
 
 }
 
@@ -113,10 +113,22 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
 
 		initializeText();
+        
+        
     }
 
-	// Update the angle every frame:
-	_angle += glm::radians(1.0);
+    setupGeometry();
+
+    const int numVertices = cpuVertexArray.size();
+    const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
+    const int cpuIndexByteSize = sizeof(int) * cpuIndexArray.size();
+
+    mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
+
+    mesh->setMaterialColor(vec4(1, 0, 0, 1));
+    
+    _flying -= 0.1;
+    
 }
 
 
@@ -128,7 +140,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Setup the view matrix to set where the camera is located in the scene
-	glm::vec3 eye_world = glm::vec3(0, 0, 5);
+	glm::vec3 eye_world = glm::vec3(0, 30, 15);
 	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	// When we use virtual reality, this will be replaced by:
 	// eye_world = glm::make_vec3(renderState.getCameraPos())
@@ -137,6 +149,21 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	// Setup the projection matrix so that things are rendered in perspective
 	GLfloat windowHeight = renderState.index().getValue("WindowHeight");
 	GLfloat windowWidth = renderState.index().getValue("WindowWidth");
+    
+    float w2 = windowWidth / 2.0f;
+    float h2 = windowHeight / 2.0f;
+    viewportMat = mat4(w2, 0.0f, 0.0f, 0.0f,
+                       0.0f, h2, 0.0f, 0.0f,
+                       0.0f, 0.0f, 1.0f, 0.0f,
+                       w2, h2, 0.0f, 1.0f);
+    
+    _shader.setUniform("viewportMatrix", viewportMat);
+    
+    _shader.setUniform("lineWidth", 0.25f);
+    _shader.setUniform("lineColor", vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
+    
+    
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), windowWidth / windowHeight, 0.01f, 100.0f);
 	// When we use virtual reality, this will be replaced by:
 	// projection = glm::make_mat4(renderState.getProjectionMatrix())
@@ -144,8 +171,8 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	// Setup the model matrix
 	glm::mat4 model = glm::mat4(1.0);
 
-	glm::mat4 rotate = glm::toMat4(glm::angleAxis(_angle, vec3(0, 1, 0))) * glm::toMat4(glm::angleAxis(glm::radians(20.0f), vec3(1.0, 0.0, 0.0)));
-	model = rotate * model;
+//    glm::mat4 rotate = glm::toMat4(glm::angleAxis(_angle, vec3(0, 1, 0))) * glm::toMat4(glm::angleAxis(glm::radians(20.0f), vec3(1.0, 0.0, 0.0)));
+//    model = rotate * model;
     
 	// Tell opengl we want to use this specific shader.
 	_shader.use();
@@ -158,7 +185,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("eye_world", eye_world);
 
 
-	_box->draw(_shader, model);
+	mesh->draw(_shader);
 
 	
 	double deltaTime = _curFrameTime - _lastTime;
@@ -193,8 +220,9 @@ void ExampleApp::drawText(const std::string text, float xPos, float yPos, GLfloa
 
 void ExampleApp::reloadShaders()
 {
-	_shader.compileShader("texture.vert", GLSLShader::VERTEX);
-	_shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
+	_shader.compileShader("BlinnPhong.vert", GLSLShader::VERTEX);
+	_shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
+    _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
 	_shader.link();
 	_shader.use();
 }
@@ -225,3 +253,54 @@ void ExampleApp::initializeText() {
 	_textShader.compileShader("textRendering.frag", GLSLShader::FRAGMENT);
 	_textShader.link();
 }
+
+
+
+
+
+void ExampleApp::setupGeometry() {
+
+    const int rows = 30;
+    const int cols = 30;
+    
+    Mesh::Vertex vert;
+    
+    float terrain[rows][cols];
+    
+    float newX = _flying * 5.0;
+    for(int x = 0; x < rows; x++) {
+        float newY = 0.0;
+        for(int y = 0; y < cols; y++) {
+            
+            terrain[x][y] = 4 * perlin(vec2(newX, newY));
+            cout << terrain[x][y] << endl;
+            newY += 0.3f;
+            
+        }
+        newX += 0.3f;
+    }
+    
+    for (int row = 0; row < rows - 1; row++) {
+        for (int col = 0; col <= cols; col++) {
+            vert.position = vec3(col - cols/2, terrain[row][col], row - rows/2 + 8);
+            vert.normal = vec3(0, 1, 0);
+            vert.texCoord0 = vec2(0, 0);
+            cpuVertexArray.push_back(vert);
+            cpuIndexArray.push_back(2 * ((cols + 1) * row + col));
+            
+            vert.position = vec3(col - cols/2, terrain[row + 1][col], row - rows/2 + 9);
+            vert.normal = vec3(0, 1, 0);
+            vert.texCoord0 = vec2(0, 0);
+            cpuVertexArray.push_back(vert);
+            cpuIndexArray.push_back(2 * ((cols + 1) * row + col) + 1);
+        }
+    }
+    
+    for(int i = 0; i < cpuIndexArray.size(); i++) {
+        
+        cout << cpuIndexArray.at(i) << endl;
+        
+    }
+    
+}
+

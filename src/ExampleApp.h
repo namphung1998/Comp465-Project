@@ -8,6 +8,8 @@ using namespace MinVR;
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
+#include <glm/gtc/noise.hpp>
+
 #ifdef _WIN32
 #include "GL/glew.h"
 #include "GL/wglew.h"
@@ -57,19 +59,35 @@ public:
 private:
 
 	std::unique_ptr<Box> _box;
-	float _angle;
+	float _flying;
 
 	double _lastTime;
 	double _curFrameTime;
 
 	virtual void reloadShaders();
 	GLSLProgram _shader;
+    
+    void setupGeometry();
+    
+    glm::mat4 viewportMat;
 
 	void initializeText();
 	void drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth);
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
+    
+    
+protected:
+    
+    std::vector< std::shared_ptr<basicgraphics::Texture> > textures;
+    std::vector<basicgraphics::Mesh::Vertex> cpuVertexArray;
+    std::vector<int> cpuIndexArray;
+    std::unique_ptr<basicgraphics::Mesh> mesh;
+    
+    
 };
+
+
 
 
 #endif //EXAMPLEAPP_H
