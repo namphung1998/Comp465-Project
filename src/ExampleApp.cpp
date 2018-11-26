@@ -10,7 +10,7 @@
 ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
-	_flying = 0.0;
+	_flying = 30.0;
 
 }
 
@@ -113,21 +113,10 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
 
 		initializeText();
-        
-        
     }
 
-    setupGeometry();
-
-    const int numVertices = cpuVertexArray.size();
-    const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
-    const int cpuIndexByteSize = sizeof(int) * cpuIndexArray.size();
-
-    mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
-
-    mesh->setMaterialColor(vec4(1, 0, 0, 1));
-    
-    _flying -= 0.1;
+	terrain.reset(new Terrain());
+	_flying -= 0.1;
     
 }
 
@@ -140,8 +129,8 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Setup the view matrix to set where the camera is located in the scene
-	glm::vec3 eye_world = glm::vec3(0, 30, 15);
-	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::vec3 eye_world = glm::vec3(0, 30, _flying);
+	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, _flying - 30), glm::vec3(0, 1, 0));
 	// When we use virtual reality, this will be replaced by:
 	// eye_world = glm::make_vec3(renderState.getCameraPos())
 	// view = glm::make_mat4(renderState.getViewMatrix());
@@ -185,7 +174,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("eye_world", eye_world);
 
 
-	mesh->draw(_shader);
+	terrain->draw(_shader);
 
 	
 	double deltaTime = _curFrameTime - _lastTime;
@@ -282,13 +271,13 @@ void ExampleApp::setupGeometry() {
     
     for (int row = 0; row < rows - 1; row++) {
         for (int col = 0; col <= cols; col++) {
-            vert.position = vec3(col - cols/2, terrain[row][col], row - rows/2 + 8);
+            vert.position = vec3(col - cols/2, terrain[row][col], row - rows/2);
             vert.normal = vec3(0, 1, 0);
             vert.texCoord0 = vec2(0, 0);
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * row + col));
             
-            vert.position = vec3(col - cols/2, terrain[row + 1][col], row - rows/2 + 9);
+            vert.position = vec3(col - cols/2, terrain[row + 1][col], row - rows/2 + 1);
             vert.normal = vec3(0, 1, 0);
             vert.texCoord0 = vec2(0, 0);
             cpuVertexArray.push_back(vert);

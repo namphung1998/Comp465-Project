@@ -3,12 +3,11 @@
 
 #include <api/MinVR.h>
 using namespace MinVR;
+#include "Terrain.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
-
-#include <glm/gtc/noise.hpp>
 
 #ifdef _WIN32
 #include "GL/glew.h"
@@ -75,6 +74,7 @@ private:
 	void drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth);
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
+    std::shared_ptr<Terrain> terrain;
     
     
 protected:
