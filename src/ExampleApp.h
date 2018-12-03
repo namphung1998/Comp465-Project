@@ -59,6 +59,7 @@ private:
 
 	std::unique_ptr<Box> _box;
 	float _flying;
+    bool paused;
 
 	double _lastTime;
 	double _curFrameTime;
@@ -83,6 +84,8 @@ protected:
     std::vector<basicgraphics::Mesh::Vertex> cpuVertexArray;
     std::vector<int> cpuIndexArray;
     std::unique_ptr<basicgraphics::Mesh> mesh;
+
+    shared_ptr<Texture> tex;
     
     
 };

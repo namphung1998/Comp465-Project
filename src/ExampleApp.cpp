@@ -11,6 +11,8 @@ ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
 	_flying = 30.0;
+	paused = false;
+	
 
 }
 
@@ -55,6 +57,10 @@ void ExampleApp::onButtonUp(const VRButtonEvent &event) {
     // to see exactly which button has been released.
 
 	//std::cout << "ButtonUp: " << event.getName() << std::endl;
+
+	if (event.getName() == "KbdSpace_Up") {
+		paused = !paused;
+	}
 }
 
 void ExampleApp::onCursorMove(const VRCursorEvent &event) {
@@ -113,10 +119,14 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
 
 		initializeText();
+
+		tex = Texture::create2DTextureFromFile("lightingToon.jpg");
+		tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
 	terrain.reset(new Terrain());
-	_flying -= 0.1;
+	if (!paused) _flying -= 0.2;
     
 }
 
@@ -129,7 +139,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Setup the view matrix to set where the camera is located in the scene
-	glm::vec3 eye_world = glm::vec3(0, 30, _flying);
+	glm::vec3 eye_world = glm::vec3(0, 25, _flying);
 	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, _flying - 30), glm::vec3(0, 1, 0));
 	// When we use virtual reality, this will be replaced by:
 	// eye_world = glm::make_vec3(renderState.getCameraPos())
@@ -173,6 +183,8 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("normal_mat", mat3(transpose(inverse(model))));
 	_shader.setUniform("eye_world", eye_world);
 
+	tex->bind(0);
+	_shader.setUniform("tex", 0);
 
 	terrain->draw(_shader);
 
@@ -212,6 +224,9 @@ void ExampleApp::reloadShaders()
 	_shader.compileShader("BlinnPhong.vert", GLSLShader::VERTEX);
 	_shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
     _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
+
+	// _shader.compileShader("texture.vert", GLSLShader::VERTEX);
+	// _shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
 	_shader.link();
 	_shader.use();
 }

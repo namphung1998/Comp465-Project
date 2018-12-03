@@ -29,6 +29,7 @@ protected:
     std::vector<int> cpuIndexArray;
     std::unique_ptr<basicgraphics::Mesh> mesh;
     
+    
 };
 
 #endif

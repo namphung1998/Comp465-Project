@@ -6,6 +6,8 @@ using namespace glm;
 using namespace basicgraphics;
 
 Terrain::Terrain() {
+
+    
 	setupGeometry();
 
     const int numVertices = cpuVertexArray.size();
@@ -19,10 +21,10 @@ Terrain::Terrain() {
 
 void Terrain::setupGeometry() {
     const int rows = 300;
-    const int cols = 50;
+    const int cols = 70;
     
     Mesh::Vertex vert;
-    
+
     float terrain[rows][cols];
     
     float newX = 0.0;
@@ -30,7 +32,7 @@ void Terrain::setupGeometry() {
         float newY = 0.0;
         for(int y = 0; y < cols; y++) {
             
-            terrain[x][y] = 4 * perlin(vec2(newX, newY));
+            terrain[x][y] = 6 * perlin(vec2(newX, newY));
             // cout << terrain[x][y] << endl;
             newY += 0.115f;
             
@@ -40,13 +42,15 @@ void Terrain::setupGeometry() {
     
     for (int row = 0; row < rows - 1; row++) {
         for (int col = 0; col <= cols; col++) {
-            vert.position = vec3(col - cols/2, terrain[row][col], row - rows/2);
+            vert.position = vec3(col - cols/2, terrain[row][col] , row - rows/2);
+            // vert.position = vec3(col - cols/2, 0, row - rows/2);
             vert.normal = vec3(0, 1, 0);
             vert.texCoord0 = vec2(0, 0);
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * row + col));
             
-            vert.position = vec3(col - cols/2, terrain[row + 1][col], row - rows/2 + 1);
+            vert.position = vec3(col - cols/2, terrain[row + 1][col] , row - rows/2 + 1);
+            // vert.position = vec3(col - cols/2, 0, row - rows/2 + 1);
             vert.normal = vec3(0, 1, 0);
             vert.texCoord0 = vec2(0, 0);
             cpuVertexArray.push_back(vert);
