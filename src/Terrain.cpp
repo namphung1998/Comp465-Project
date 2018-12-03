@@ -7,6 +7,10 @@ using namespace basicgraphics;
 
 Terrain::Terrain() {
 
+    shared_ptr<Texture> tex = Texture::create2DTextureFromFile("lightingToon.jpg");
+    tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    textures.push_back(tex);
     
 	setupGeometry();
 
@@ -16,12 +20,12 @@ Terrain::Terrain() {
 
     mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
 
-    mesh->setMaterialColor(vec4(0,1,0,1));
+//    mesh->setMaterialColor(vec4(0,1,0,1));
 }
 
 void Terrain::setupGeometry() {
-    const int rows = 300;
-    const int cols = 70;
+    const int rows = 30;
+    const int cols = 30;
     
     Mesh::Vertex vert;
 
