@@ -23,8 +23,8 @@ Terrain::Terrain() {
 }
 
 void Terrain::setupGeometry() {
-    const int rows = 30;
-    const int cols = 30;
+    const int rows = 200;
+    const int cols = 60;
     
     Mesh::Vertex vert;
 
@@ -59,12 +59,12 @@ void Terrain::setupGeometry() {
                 vec3 e = vec3(col - 1 - cols/2, terrain[row + 1][col - 1], row + 1 - rows/2);
                 vec3 f = vec3(col - cols/2, terrain[row + 1][col], row + 1 - rows/2);
                 
-                vec3 ba = normalize(cross(a - vert.position, b - vert.position));
-                vec3 ac = normalize(cross(c - vert.position, a - vert.position));
-                vec3 ce = normalize(cross(e - vert.position, c - vert.position));
-                vec3 ef = normalize(cross(f - vert.position, e - vert.position));
-                vec3 fd = normalize(cross(d - vert.position, f - vert.position));
-                vec3 db = normalize(cross(b - vert.position, d - vert.position));
+                vec3 ba = normalize(cross(b - vert.position, a - vert.position));
+                vec3 ac = normalize(cross(a - vert.position, c - vert.position));
+                vec3 ce = normalize(cross(c - vert.position, e - vert.position));
+                vec3 ef = normalize(cross(e - vert.position, f - vert.position));
+                vec3 fd = normalize(cross(f - vert.position, d - vert.position));
+                vec3 db = normalize(cross(d - vert.position, b - vert.position));
                 
                 vert.normal = normalize(ba + ac + ce + ef + fd + db);
             }
@@ -84,12 +84,12 @@ void Terrain::setupGeometry() {
                 vec3 e = vec3(col - 1 - cols/2, terrain[row + 2][col - 1], row + 2 - rows/2);
                 vec3 f = vec3(col - cols/2, terrain[row + 2][col], row + 2 - rows/2);
                 
-                vec3 ba = normalize(cross(a - vert.position, b - vert.position));
-                vec3 ac = normalize(cross(c - vert.position, a - vert.position));
-                vec3 ce = normalize(cross(e - vert.position, c - vert.position));
-                vec3 ef = normalize(cross(f - vert.position, e - vert.position));
-                vec3 fd = normalize(cross(d - vert.position, f - vert.position));
-                vec3 db = normalize(cross(b - vert.position, d - vert.position));
+                vec3 ba = normalize(cross(b - vert.position, a - vert.position));
+                vec3 ac = normalize(cross(a - vert.position, c - vert.position));
+                vec3 ce = normalize(cross(c - vert.position, e - vert.position));
+                vec3 ef = normalize(cross(e - vert.position, f - vert.position));
+                vec3 fd = normalize(cross(f - vert.position, d - vert.position));
+                vec3 db = normalize(cross(d - vert.position, b - vert.position));
                 
                 vert.normal = normalize(ba + ac + ce + ef + fd + db);
             }
