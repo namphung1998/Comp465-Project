@@ -179,10 +179,14 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("model_mat", model);
 	_shader.setUniform("normal_mat", mat3(transpose(inverse(model))));
 	_shader.setUniform("eye_world", eye_world);
+    
+    _normalShader.use();
+    _normalShader.setUniform("normalLength", 0.2f);
+    _normalShader.setUniform("view_mat", view);
+    _normalShader.setUniform("projection_mat", projection);
+    _normalShader.setUniform("model_mat", model);
 
-	//tex->bind(0);
-	//_shader.setUniform("tex", 0);
-
+    terrain->draw(_normalShader);
 	terrain->draw(_shader);
 
 	
@@ -218,12 +222,19 @@ void ExampleApp::drawText(const std::string text, float xPos, float yPos, GLfloa
 
 void ExampleApp::reloadShaders()
 {
-    _shader.compileShader("BlinnPhong.vert", GLSLShader::VERTEX);
-    _shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
-    _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
+//    _shader.compileShader("BlinnPhong.vert", GLSLShader::VERTEX);
+//    _shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
+//    _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
 
-//    _shader.compileShader("texture.vert", GLSLShader::VERTEX);
-//    _shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
+    _shader.compileShader("texture.vert", GLSLShader::VERTEX);
+    _shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
+    
+    _normalShader.compileShader("normals.vert", GLSLShader::VERTEX);
+    _normalShader.compileShader("normals.frag", GLSLShader::FRAGMENT);
+    _normalShader.compileShader("normals.geom", GLSLShader::GEOMETRY);
+    
+    _normalShader.link();
+    
 	_shader.link();
 	_shader.use();
 }

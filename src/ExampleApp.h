@@ -66,6 +66,7 @@ private:
 
 	virtual void reloadShaders();
 	GLSLProgram _shader;
+    GLSLProgram _normalShader;
     
     void setupGeometry();
     
