@@ -19,7 +19,7 @@ Terrain::Terrain() {
 
     mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
 
-//    mesh->setMaterialColor(vec4(0,1,0,1));
+   mesh->setMaterialColor(vec4(0,1,0,1));
 }
 
 void Terrain::setupGeometry() {
@@ -93,12 +93,7 @@ void Terrain::setupGeometry() {
                 
                 vert.normal = normalize(ba + ac + ce + ef + fd + db);
             }
-            
-            
-            
-            
-            // vert.position = vec3(col - cols/2, 0, row - rows/2 + 1);
-            vert.normal = vec3(0, 1, 0);
+
             vert.texCoord0 = vec2(0, 0);
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * row + col) + 1);
