@@ -218,12 +218,12 @@ void ExampleApp::drawText(const std::string text, float xPos, float yPos, GLfloa
 
 void ExampleApp::reloadShaders()
 {
-//    _shader.compileShader("BlinnPhong.vert", GLSLShader::VERTEX);
-//    _shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
-//    _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
+    _shader.compileShader("BlinnPhong.vert", GLSLShader::VERTEX);
+    _shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
+    _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
 
-	_shader.compileShader("texture.vert", GLSLShader::VERTEX);
-	_shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
+//    _shader.compileShader("texture.vert", GLSLShader::VERTEX);
+//    _shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
 	_shader.link();
 	_shader.use();
 }
@@ -254,48 +254,3 @@ void ExampleApp::initializeText() {
 	_textShader.compileShader("textRendering.frag", GLSLShader::FRAGMENT);
 	_textShader.link();
 }
-
-
-
-
-
-void ExampleApp::setupGeometry() {
-
-    const int rows = 30;
-    const int cols = 30;
-    
-    Mesh::Vertex vert;
-    
-    float terrain[rows][cols];
-    
-    float newX = _flying;
-    for(int x = 0; x < rows; x++) {
-        float newY = 0.0;
-        for(int y = 0; y < cols; y++) {
-            
-            terrain[x][y] = 4 * perlin(vec2(newX, newY));
-            // cout << terrain[x][y] << endl;
-            newY += 0.3f;
-            
-        }
-        newX += 0.3f;
-    }
-    
-    for (int row = 0; row < rows - 1; row++) {
-        for (int col = 0; col <= cols; col++) {
-            vert.position = vec3(col - cols/2, terrain[row][col], row - rows/2);
-            vert.normal = vec3(0, 1, 0);
-            vert.texCoord0 = vec2(0, 0);
-            cpuVertexArray.push_back(vert);
-            cpuIndexArray.push_back(2 * ((cols + 1) * row + col));
-            
-            vert.position = vec3(col - cols/2, terrain[row + 1][col], row - rows/2 + 1);
-            vert.normal = vec3(0, 1, 0);
-            vert.texCoord0 = vec2(0, 0);
-            cpuVertexArray.push_back(vert);
-            cpuIndexArray.push_back(2 * ((cols + 1) * row + col) + 1);
-        }
-    }
-    
-}
-

@@ -29,6 +29,8 @@ protected:
     std::vector<int> cpuIndexArray;
     std::unique_ptr<basicgraphics::Mesh> mesh;
     
+//    vec3 getPosition(int row, int rows, int col, int cols);
+    
     
 };
 
