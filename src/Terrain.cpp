@@ -19,12 +19,12 @@ Terrain::Terrain() {
 
     mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
 
-   mesh->setMaterialColor(vec4(0,1,0,1));
+    mesh->setMaterialColor(vec4(0,1,0,1));
 }
 
 void Terrain::setupGeometry() {
     const int rows = 200;
-    const int cols = 60;
+    const int cols = 70;
     
     Mesh::Vertex vert;
 

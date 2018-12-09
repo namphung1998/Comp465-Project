@@ -226,8 +226,8 @@ void ExampleApp::reloadShaders()
 //   _shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
 //   _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
 
-     _shader.compileShader("texture.vert", GLSLShader::VERTEX);
-     _shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
+     _shader.compileShader("vertex.vert", GLSLShader::VERTEX);
+     _shader.compileShader("sand.frag", GLSLShader::FRAGMENT);
     
     _normalShader.compileShader("normals.vert", GLSLShader::VERTEX);
     _normalShader.compileShader("normals.frag", GLSLShader::FRAGMENT);
