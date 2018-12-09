@@ -17,6 +17,7 @@ public:
     
     // Calculate and set up the buffers to render to screen
     void setupGeometry();
+    void updateGeometry();
     
     // Draw the Earth to screen
     void draw(basicgraphics::GLSLProgram &shader);
@@ -28,6 +29,8 @@ protected:
     std::vector<basicgraphics::Mesh::Vertex> cpuVertexArray;
     std::vector<int> cpuIndexArray;
     std::unique_ptr<basicgraphics::Mesh> mesh;
+
+    std::vector<float> terrain;
     
 //    vec3 getPosition(int row, int rows, int col, int cols);
     

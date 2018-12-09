@@ -119,10 +119,12 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
 
 		initializeText();
-
+		terrain.reset(new Terrain());
     }
 
-	terrain.reset(new Terrain());
+	// update terrain here using Mesh' update functions
+
+	
 	if (!paused) _flying -= 0.2;
     
 }
