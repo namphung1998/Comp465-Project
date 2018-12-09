@@ -179,6 +179,12 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("model_mat", model);
 	_shader.setUniform("normal_mat", mat3(transpose(inverse(model))));
 	_shader.setUniform("eye_world", eye_world);
+
+	vec3 ambientReflectionCoeff(0.7, 0.7, 0.7);
+	vec3 ambientLightIntensity(0.3, 0.3, 0.3);
+
+	_shader.setUniform("ambientReflectionCoeff", ambientReflectionCoeff);
+	_shader.setUniform("ambientLightIntensity", ambientLightIntensity);
 //
 //    _normalShader.use();
 //    _normalShader.setUniform("normalLength", 1.0f);
@@ -226,8 +232,11 @@ void ExampleApp::reloadShaders()
 //   _shader.compileShader("BlinnPhong.frag", GLSLShader::FRAGMENT);
 //   _shader.compileShader("BlinnPhong.geom", GLSLShader::GEOMETRY);
 
-     _shader.compileShader("vertex.vert", GLSLShader::VERTEX);
+     _shader.compileShader("texture.vert", GLSLShader::VERTEX);
      _shader.compileShader("sand.frag", GLSLShader::FRAGMENT);
+
+	// _shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
+	// _shader.compileShader("texture.vert", GLSLShader::VERTEX);
     
     _normalShader.compileShader("normals.vert", GLSLShader::VERTEX);
     _normalShader.compileShader("normals.frag", GLSLShader::FRAGMENT);

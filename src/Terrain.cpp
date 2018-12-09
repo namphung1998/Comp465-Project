@@ -7,9 +7,10 @@ using namespace basicgraphics;
 
 Terrain::Terrain() {
 
-    shared_ptr<Texture> tex = Texture::create2DTextureFromFile("lightingToon.jpg");
+    shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand2.jpeg");
     tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    textures.push_back(tex);
     
 	setupGeometry();
 
@@ -19,7 +20,7 @@ Terrain::Terrain() {
 
     mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
 
-    mesh->setMaterialColor(vec4(0,1,0,1));
+    mesh->setMaterialColor(vec4(0.929, 0.788, 0.686,1));
 }
 
 void Terrain::setupGeometry() {
@@ -68,7 +69,7 @@ void Terrain::setupGeometry() {
                 
                 vert.normal = normalize(ba + ac + ce + ef + fd + db);
             }
-            vert.texCoord0 = vec2(0, 0);
+            vert.texCoord0 = vec2(col/cols, row/rows);
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * row + col));
             
@@ -94,7 +95,7 @@ void Terrain::setupGeometry() {
                 vert.normal = normalize(ba + ac + ce + ef + fd + db);
             }
 
-            vert.texCoord0 = vec2(0, 0);
+            vert.texCoord0 = vec2((col/cols, (row+1)/rows));
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * row + col) + 1);
         }
