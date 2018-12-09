@@ -12,26 +12,25 @@ Terrain::Terrain() {
     tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // textures.push_back(tex);
     
-	setupGeometry();
+	setupGeometry(0);
+    setupGeometry(1);
 
     const int numVertices = cpuVertexArray.size();
     const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
     const int cpuIndexByteSize = sizeof(int) * cpuIndexArray.size();
 
-    mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
+    mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,cpuVertexByteSize * 2, cpuIndexByteSize * 2, 0, cpuVertexArray,cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
 
     mesh->setMaterialColor(vec4(0.929, 0.788, 0.686,1));
 }
 
-void Terrain::setupGeometry() {
+void Terrain::setupGeometry(int offset) {
     const int rows = 110;
     const int cols = 70;
     
     Mesh::Vertex vert;
 
     // float terrain[rows][cols];
-
-    
     
     float newX = 0.0;
     for(int x = 0; x < rows; x++) {
@@ -46,26 +45,27 @@ void Terrain::setupGeometry() {
         }
         newX += 0.115f;
     }
-
-    for (int i = 0; i < terrain.size(); i++) {
-        cout << terrain[i] << endl;
-    }
     
     for (int row = 0; row < rows - 1; row++) {
-        // newRow = offSet * rows + row
+
+
+        int newRow = offset * rows + row;
+
+
+
         for (int col = 0; col <= cols; col++) {
-            vert.position = vec3(col - cols/2, terrain[(row) * cols + col] , row - rows/2);
+            vert.position = vec3(col - cols/2, terrain[(row) * cols + col] , newRow - rows/2);
             // vert.position = vec3(col - cols/2, 0, row - rows/2);
             
             if(row == 0 || row == rows-1 || col == 0 || col == cols-1) {
                 vert.normal = vec3(0, -1, 0);
             } else {
-                vec3 a = vec3(col - cols/2, terrain[(row-1) * cols + col] , row - 1 - rows/2);
-                vec3 b = vec3(col + 1 - cols/2, terrain[(row-1) * cols + col+1], row - 1 - rows/2);
-                vec3 c = vec3(col - 1 - cols/2, terrain[(row) * cols + col - 1], row - rows/2);
-                vec3 d = vec3(col + 1 - cols/2, terrain[(row) * cols + col+1], row - rows/2);
-                vec3 e = vec3(col - 1 - cols/2, terrain[(row+1) * cols + col-1], row + 1 - rows/2);
-                vec3 f = vec3(col - cols/2, terrain[(row+1) * cols + col], row + 1 - rows/2);
+                vec3 a = vec3(col - cols/2, terrain[(row-1) * cols + col] , newRow - 1 - rows/2);
+                vec3 b = vec3(col + 1 - cols/2, terrain[(row-1) * cols + col+1], newRow - 1 - rows/2);
+                vec3 c = vec3(col - 1 - cols/2, terrain[(row) * cols + col - 1], newRow - rows/2);
+                vec3 d = vec3(col + 1 - cols/2, terrain[(row) * cols + col+1], newRow - rows/2);
+                vec3 e = vec3(col - 1 - cols/2, terrain[(row+1) * cols + col-1], newRow + 1 - rows/2);
+                vec3 f = vec3(col - cols/2, terrain[(row+1) * cols + col], newRow + 1 - rows/2);
                 
                 vec3 ba = normalize(cross(b - vert.position, a - vert.position));
                 vec3 ac = normalize(cross(a - vert.position, c - vert.position));
@@ -78,19 +78,19 @@ void Terrain::setupGeometry() {
             }
             vert.texCoord0 = vec2(col/cols, row/rows);
             cpuVertexArray.push_back(vert);
-            cpuIndexArray.push_back(2 * ((cols + 1) * row + col));
+            cpuIndexArray.push_back(2 * ((cols + 1) * newRow + col));
             
-            vert.position = vec3(col - cols/2, terrain[(row+1) * cols + col] , row - rows/2 + 1);
+            vert.position = vec3(col - cols/2, terrain[(row+1) * cols + col] , newRow - rows/2 + 1);
             
             if(row + 1 == rows - 1 || col == 0 || col == cols - 1) {
                 vert.normal = vec3(0, -1, 0);
             } else {
-                vec3 a = vec3(col - cols/2, terrain[(row) * cols + col], row - rows/2);
-                vec3 b = vec3(col + 1 - cols/2, terrain[(row) * cols + col+1], row - rows/2);
-                vec3 c = vec3(col - 1 - cols/2, terrain[(row+1) * cols + col-1], row + 1 - rows/2);
-                vec3 d = vec3(col + 1 - cols/2, terrain[(row+1) * cols + col+1], row + 1 - rows/2);
-                vec3 e = vec3(col - 1 - cols/2, terrain[(row+2) * cols + col-1], row + 2 - rows/2);
-                vec3 f = vec3(col - cols/2, terrain[(row+2) * cols + col], row + 2 - rows/2);
+                vec3 a = vec3(col - cols/2, terrain[(row) * cols + col], newRow - rows/2);
+                vec3 b = vec3(col + 1 - cols/2, terrain[(row) * cols + col+1], newRow - rows/2);
+                vec3 c = vec3(col - 1 - cols/2, terrain[(row+1) * cols + col-1], newRow + 1 - rows/2);
+                vec3 d = vec3(col + 1 - cols/2, terrain[(row+1) * cols + col+1], newRow + 1 - rows/2);
+                vec3 e = vec3(col - 1 - cols/2, terrain[(row+2) * cols + col-1], newRow + 2 - rows/2);
+                vec3 f = vec3(col - cols/2, terrain[(row+2) * cols + col], newRow + 2 - rows/2);
                 
                 vec3 ba = normalize(cross(b - vert.position, a - vert.position));
                 vec3 ac = normalize(cross(a - vert.position, c - vert.position));
@@ -104,7 +104,7 @@ void Terrain::setupGeometry() {
 
             vert.texCoord0 = vec2((col/cols, (row+1)/rows));
             cpuVertexArray.push_back(vert);
-            cpuIndexArray.push_back(2 * ((cols + 1) * row + col) + 1);
+            cpuIndexArray.push_back(2 * ((cols + 1) * newRow + col) + 1);
         }
     }
 }
@@ -116,7 +116,22 @@ void Terrain::setupGeometry() {
 void Terrain::updateGeometry() {
     terrain.clear();
 
-    setupGeometry();
+    setupGeometry(1);
+
+    const int numVertices = cpuVertexArray.size();
+    const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
+    const int cpuIndexByteSize = sizeof(int) * cpuIndexArray.size();
+    const int filledVertexByteSize = mesh->getFilledVertexByteSize();
+    const int filledIndexByteSize = mesh->getFilledIndexByteSize();
+    // if (cpuVertexByteSize > filledVertexByteSize) {
+        // Just upload the new data
+    const int vertexOffset = (float)filledVertexByteSize / (float)sizeof(Mesh::Vertex);
+    const int newVertexDataByteSize = cpuVertexByteSize - filledVertexByteSize;
+    const int newIndexDataByteSize = cpuIndexByteSize - filledIndexByteSize;
+    mesh->updateVertexData(filledVertexByteSize, vertexOffset, cpuVertexArray);
+    mesh->updateIndexData(cpuIndexArray.size(), filledIndexByteSize, newIndexDataByteSize, &cpuIndexArray[0]+vertexOffset);
+
+
 }
 
 void Terrain::draw(GLSLProgram &shader) {

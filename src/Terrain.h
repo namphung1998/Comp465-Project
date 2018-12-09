@@ -16,7 +16,7 @@ public:
     
     
     // Calculate and set up the buffers to render to screen
-    void setupGeometry();
+    void setupGeometry(int offset);
     void updateGeometry();
     
     // Draw the Earth to screen

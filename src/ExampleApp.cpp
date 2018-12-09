@@ -120,6 +120,8 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 
 		initializeText();
 		terrain.reset(new Terrain());
+
+		// terrain->updateGeometry();
     }
 
 	// update terrain here using Mesh' update functions
