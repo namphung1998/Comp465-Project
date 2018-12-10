@@ -121,13 +121,13 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		initializeText();
 		terrain.reset(new Terrain());
 
-		// terrain->updateGeometry();
+		terrain->updateGeometry();
     }
 
 	// update terrain here using Mesh' update functions
 
 	
-	if (!paused) _flying -= 0.2;
+	if (!paused) _flying += 0.2;
     
 }
 
@@ -140,8 +140,8 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Setup the view matrix to set where the camera is located in the scene
-	glm::vec3 eye_world = glm::vec3(0, 25, _flying);
-	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, _flying - 30), glm::vec3(0, 1, 0));
+	glm::vec3 eye_world = glm::vec3(0, 25, _flying - 50);
+	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, _flying -20), glm::vec3(0, 1, 0));
 	// When we use virtual reality, this will be replaced by:
 	// eye_world = glm::make_vec3(renderState.getCameraPos())
 	// view = glm::make_mat4(renderState.getViewMatrix());
