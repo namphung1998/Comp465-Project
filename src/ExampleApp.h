@@ -77,6 +77,8 @@ private:
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
     std::shared_ptr<Terrain> terrain;
+
+    std::shared_ptr<basicgraphics::Texture> _normalMap;
     
     
 protected:

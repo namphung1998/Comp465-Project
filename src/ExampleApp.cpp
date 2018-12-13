@@ -118,10 +118,14 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		// Make our model objects
 		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
 
+		_normalMap = Texture::create2DTextureFromFile("sand-normal.jpg");
+		_normalMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		_normalMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 		initializeText();
 		terrain.reset(new Terrain());
 
-		terrain->updateGeometry();
+		// terrain->updateGeometry();
     }
 
 	// update terrain here using Mesh' update functions
@@ -184,8 +188,11 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("normal_mat", mat3(transpose(inverse(model))));
 	_shader.setUniform("eye_world", eye_world);
 
+	_normalMap->bind(0);
+	_shader.setUniform("_normalMap", 0);
+
 	vec3 ambientReflectionCoeff(0.7, 0.7, 0.7);
-	vec3 ambientLightIntensity(0.5);
+	vec3 ambientLightIntensity(0.3);
 
 	_shader.setUniform("ambientReflectionCoeff", ambientReflectionCoeff);
 	_shader.setUniform("ambientLightIntensity", ambientLightIntensity);

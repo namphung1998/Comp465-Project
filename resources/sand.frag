@@ -4,6 +4,7 @@
 
 uniform vec3 ambientReflectionCoeff;
 uniform vec3 ambientLightIntensity;
+uniform sampler2D _normalMap;
 
 in vec3 position_world, normal_world;
 
@@ -70,10 +71,13 @@ void main () {
     // vec4 color = texture(textureSampler, texture_coordinates );
     // vec4 color = materialColor;
 
+    vec3 newNormal = texture(_normalMap, texture_coordinates).rgb;
+
     vec3 L = normalize(position_world - lightPosition);
     vec3 H = normalize(L + normalize(eye_world - position_world));
     
     vec3 E = normalize(eye_world - position_world);
+    // vec3 N = normalize(normalize(normal_world) + normalize(newNormal));
     vec3 N = normalize(normal_world);
     // Ambient
 
