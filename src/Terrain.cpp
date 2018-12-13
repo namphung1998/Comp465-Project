@@ -10,7 +10,7 @@ Terrain::Terrain() {
     shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand2.jpeg");
     tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // textures.push_back(tex);
+    textures.push_back(tex);
     
 	setupGeometry(0);
 //    setupGeometry(1);
@@ -25,7 +25,7 @@ Terrain::Terrain() {
 }
 
 void Terrain::setupGeometry(int offset) {
-    const int rows = 110;
+    const int rows = 200;
     const int cols = 70;
     
     Mesh::Vertex vert;
@@ -82,6 +82,7 @@ void Terrain::setupGeometry(int offset) {
             cpuIndexArray.push_back(2 * ((cols + 1) * newRow + col));
             
             vert.position = vec3(col - cols/2.0, terrain[(row+1) * cols + col] , newRow - rows/2.0 + 1);
+            // vert.position = vec3(col - cols/2, 0, row + 1 - rows/2);
             
             if(row + 1 == rows - 1 || col == 0 || col == cols - 1) {
                 vert.normal = vec3(0, -1, 0);

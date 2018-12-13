@@ -140,7 +140,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Setup the view matrix to set where the camera is located in the scene
-	glm::vec3 eye_world = glm::vec3(0, 25, _flying - 50);
+	glm::vec3 eye_world = glm::vec3(0, 20, _flying - 50);
 	glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0, 0, _flying -20), glm::vec3(0, 1, 0));
 	// When we use virtual reality, this will be replaced by:
 	// eye_world = glm::make_vec3(renderState.getCameraPos())
@@ -185,7 +185,7 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("eye_world", eye_world);
 
 	vec3 ambientReflectionCoeff(0.7, 0.7, 0.7);
-	vec3 ambientLightIntensity(0.3, 0.3, 0.3);
+	vec3 ambientLightIntensity(0.5);
 
 	_shader.setUniform("ambientReflectionCoeff", ambientReflectionCoeff);
 	_shader.setUniform("ambientLightIntensity", ambientLightIntensity);

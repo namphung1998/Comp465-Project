@@ -62,6 +62,9 @@ vec3 orenNayar(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, floa
 // }
 
 void main () {
+    
+
+
     vec4 color = materialColor * (1 - hasTexture) + hasTexture * texture(textureSampler, texture_coordinates );
 
     // vec4 color = texture(textureSampler, texture_coordinates );
