@@ -1,5 +1,5 @@
-#ifndef EXAMPLEAPP_H
-#define EXAMPLEAPP_H
+#ifndef APP_H
+#define APP_H
 
 #include <api/MinVR.h>
 using namespace MinVR;
@@ -33,13 +33,13 @@ using namespace MinVR;
 #include <BasicGraphics.h>
 using namespace basicgraphics;
 
-class ExampleApp : public VRApp {
+class App : public VRApp {
 public:
     
     /** The constructor passes argc, argv, and a MinVR config file on to VRApp.
      */
-	ExampleApp(int argc, char** argv);
-    virtual ~ExampleApp();
+	App(int argc, char** argv);
+    virtual ~App();
 
     
     /** USER INTERFACE CALLBACKS **/
@@ -96,4 +96,4 @@ protected:
 
 
 
-#endif //EXAMPLEAPP_H
+#endif

@@ -26,7 +26,7 @@ AutoBuild_init()
 
 #---------------------- Source for this Project ----------------------
 
-project(basicgraphics-example)
+project(terrain-generation)
 
 message(STATUS "==== BUILDING ${PROJECT_NAME}")
 message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
@@ -35,12 +35,12 @@ message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 set(source_files
   src/main.cpp
-  src/ExampleApp.cpp
+  src/App.cpp
   src/Terrain.cpp
 )
 
 set(header_files
-  src/ExampleApp.h
+  src/App.h
   src/Terrain.h
 )
 
@@ -49,17 +49,14 @@ set(extra_files
   resources/BlinnPhong.frag
   resources/BlinnPhong.geom
   resources/BlinnPhong.vert
-  resources/BlinnPhong2.vert
-  resources/BlinnPhong2.frag
-  resources/normals.vert
-  resources/normals.frag
-  resources/normals.geom
   resources/textRendering.vert
   resources/textRendering.frag
   resources/texture.vert
   resources/texture.frag
-  resources/lightingNormal.jpg
-  resources/lightingToon.jpg
+  resources/sand-normal.jpg
+  resources/sand-normal2.jpg
+  resources/sand.frag
+  resources/sand2.jpeg
 )
 
 set_source_files_properties(${extra_files} PROPERTIES HEADER_FILE_ONLY TRUE)

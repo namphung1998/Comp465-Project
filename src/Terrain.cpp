@@ -29,8 +29,6 @@ void Terrain::setupGeometry(int offset) {
     const int cols = 70;
     
     Mesh::Vertex vert;
-
-    // float terrain[rows][cols];
     
     float newX = 0.0;
     for(int x = 0; x < rows; x++) {
@@ -56,27 +54,10 @@ void Terrain::setupGeometry(int offset) {
 
         for (int col = 0; col <= cols; col++) {
             vert.position = vec3(col - cols/2.0, terrain[(row) * cols + col] , newRow - rows/2.0);
-            // vert.position = vec3(col - cols/2, 0, row - rows/2);
             
             if(row == 0 || row == rows-1 || col == 0 || col == cols-1) {
                 vert.normal = vec3(0, -1, 0);
             } else {
-                // vec3 a = vec3(col - cols/2.0, terrain[(row-1) * cols + col] , newRow - 1 - rows/2.0);
-                // vec3 b = vec3(col + 1 - cols/2.0, terrain[(row-1) * cols + col+1], newRow - 1 - rows/2.0);
-                // vec3 c = vec3(col - 1 - cols/2.0, terrain[(row) * cols + col - 1], newRow - rows/2.0);
-                // vec3 d = vec3(col + 1 - cols/2.0, terrain[(row) * cols + col+1], newRow - rows/2.0);
-                // vec3 e = vec3(col - 1 - cols/2.0, terrain[(row+1) * cols + col-1], newRow + 1 - rows/2.0);
-                // vec3 f = vec3(col - cols/2.0, terrain[(row+1) * cols + col], newRow + 1 - rows/2.0);
-                
-                // vec3 ba = normalize(cross(b - vert.position, a - vert.position));
-                // vec3 ac = normalize(cross(a - vert.position, c - vert.position));
-                // vec3 ce = normalize(cross(c - vert.position, e - vert.position));
-                // vec3 ef = normalize(cross(e - vert.position, f - vert.position));
-                // vec3 fd = normalize(cross(f - vert.position, d - vert.position));
-                // vec3 db = normalize(cross(d - vert.position, b - vert.position));
-                
-                // vert.normal = normalize(ba + ac + ce + ef + fd + db);
-
                 vec3 a = vec3(2, terrain[row * cols + col + 1] - terrain[row * cols + col - 1], 0);
                 vec3 b = vec3(0, terrain[(row - 1) * cols + col] - terrain[(row + 1) * cols + col], 2);
 
@@ -87,27 +68,10 @@ void Terrain::setupGeometry(int offset) {
             cpuIndexArray.push_back(2 * ((cols + 1) * newRow + col));
             
             vert.position = vec3(col - cols/2.0, terrain[(row+1) * cols + col] , newRow - rows/2.0 + 1);
-            // vert.position = vec3(col - cols/2, 0, row + 1 - rows/2);
             
             if(row + 1 == rows - 1 || col == 0 || col == cols - 1) {
                 vert.normal = vec3(0, -1, 0);
             } else {
-                // vec3 a = vec3(col - cols/2.0, terrain[(row) * cols + col], newRow - rows/2.0);
-                // vec3 b = vec3(col + 1 - cols/2.0, terrain[(row) * cols + col+1], newRow - rows/2.0);
-                // vec3 c = vec3(col - 1 - cols/2.0, terrain[(row+1) * cols + col-1], newRow + 1 - rows/2.0);
-                // vec3 d = vec3(col + 1 - cols/2.0, terrain[(row+1) * cols + col+1], newRow + 1 - rows/2.0);
-                // vec3 e = vec3(col - 1 - cols/2.0, terrain[(row+2) * cols + col-1], newRow + 2 - rows/2.0);
-                // vec3 f = vec3(col - cols/2.0, terrain[(row+2) * cols + col], newRow + 2 - rows/2.0);
-                
-                // vec3 ba = normalize(cross(b - vert.position, a - vert.position));
-                // vec3 ac = normalize(cross(a - vert.position, c - vert.position));
-                // vec3 ce = normalize(cross(c - vert.position, e - vert.position));
-                // vec3 ef = normalize(cross(e - vert.position, f - vert.position));
-                // vec3 fd = normalize(cross(f - vert.position, d - vert.position));
-                // vec3 db = normalize(cross(d - vert.position, b - vert.position));
-                
-                // vert.normal = normalize(ba + ac + ce + ef + fd + db);
-
                 vec3 a = vec3(2, terrain[(row + 1) * cols + col + 1] - terrain[(row + 1) * cols + col - 1], 0);
                 vec3 b = vec3(0, terrain[(row) * cols + col] - terrain[(row + 2) * cols + col], 2);
 
@@ -120,10 +84,6 @@ void Terrain::setupGeometry(int offset) {
         }
     }
 }
-//
-//vec3 Terrain::getPosition(int row, int rows, int col, int cols) {
-//    return vec3(col - cols/2, terrain[row][col], row - rows/2);
-//}
 
 void Terrain::updateGeometry() {
     terrain.clear();
