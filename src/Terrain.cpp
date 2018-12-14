@@ -9,10 +9,10 @@ Terrain::Terrain(float flying) {
 
     _flying = flying;
 
-    shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand3.jpg");
-    tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    textures.push_back(tex);
+    // shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand2.jpg");
+    // tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    // tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // textures.push_back(tex);
     
 	setupGeometry(0);
 //    setupGeometry(1);
@@ -68,7 +68,7 @@ void Terrain::setupGeometry(int offset) {
             }
             // vert.texCoord0 = vec2( (float) col/cols, ((float)(row + _flying) /rows) % 1.0 );
 
-            vert.texCoord0 = vec2( (float) col / cols, fmod(((float)(row + _flying) / rows ), 1.0 ));
+            // vert.texCoord0 = vec2( (float) col / cols, fmod(((float)(row + _flying) / rows ), 1.0 ));
 
             vert.texCoord0 = vec2(col/cols, row/rows);
 
@@ -88,7 +88,7 @@ void Terrain::setupGeometry(int offset) {
 
             // vert.texCoord0 = vec2(( (float)col/cols, ((float)(row+1 + _flying)/rows))% 1.0 );
 
-            vert.texCoord0 = vec2( (float) col / cols, fmod(((float)(row + _flying + 1) / rows ), 1.0 ));
+            // vert.texCoord0 = vec2( (float) col / cols, fmod(((float)(row + _flying + 1) / rows ), 1.0 ));
 
             vert.texCoord0 = vec2(col/cols, (row + 1)/rows);
             cpuVertexArray.push_back(vert);
