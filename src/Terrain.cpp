@@ -5,7 +5,9 @@ using namespace std;
 using namespace glm;
 using namespace basicgraphics;
 
-Terrain::Terrain() {
+Terrain::Terrain(float flying) {
+
+    _flying = flying;
 
     shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand2.jpeg");
     tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -13,7 +15,7 @@ Terrain::Terrain() {
     // textures.push_back(tex);
     
 	setupGeometry(0);
-   setupGeometry(1);
+//    setupGeometry(1);
 
     const int numVertices = cpuVertexArray.size();
     const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
@@ -30,7 +32,7 @@ void Terrain::setupGeometry(int offset) {
     
     Mesh::Vertex vert;
     
-    float newX = 0.0;
+    float newX = _flying;
     for(int x = 0; x < rows; x++) {
         float newY = 0.0;
         for(int y = 0; y < cols; y++) {

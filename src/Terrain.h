@@ -11,7 +11,7 @@
 
 class Terrain {
 public:
-    Terrain();
+    Terrain(float flying);
     ~Terrain(){};
     
     
@@ -31,6 +31,7 @@ protected:
     std::unique_ptr<basicgraphics::Mesh> mesh;
 
     std::vector<float> terrain;
+    float _flying;
     
 //    vec3 getPosition(int row, int rows, int col, int cols);
     
