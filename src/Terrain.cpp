@@ -9,10 +9,10 @@ Terrain::Terrain(float flying) {
 
     _flying = flying;
 
-    shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand2.jpeg");
+    shared_ptr<Texture> tex = Texture::create2DTextureFromFile("sand3.jpg");
     tex->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     tex->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // textures.push_back(tex);
+    textures.push_back(tex);
     
 	setupGeometry(0);
 //    setupGeometry(1);
@@ -39,6 +39,7 @@ void Terrain::setupGeometry(int offset) {
             if(x == 0 || x == rows-1 || y == 0 || y == cols-1) {
                 terrain.push_back(0.0);
             } else {
+
                 terrain.push_back(4 * perlin(vec2(newX, newY)));
                 newY += 0.115f;
             }
@@ -65,7 +66,12 @@ void Terrain::setupGeometry(int offset) {
 
                 vert.normal = normalize(cross(a, b));
             }
+            // vert.texCoord0 = vec2( (float) col/cols, ((float)(row + _flying) /rows) % 1.0 );
+
+            vert.texCoord0 = vec2( (float) col / cols, fmod(((float)(row + _flying) / rows ), 1.0 ));
+
             vert.texCoord0 = vec2(col/cols, row/rows);
+
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * newRow + col));
             
@@ -80,7 +86,11 @@ void Terrain::setupGeometry(int offset) {
                 vert.normal = normalize(cross(a, b));
             }
 
-            vert.texCoord0 = vec2((col/cols, (row+1)/rows));
+            // vert.texCoord0 = vec2(( (float)col/cols, ((float)(row+1 + _flying)/rows))% 1.0 );
+
+            vert.texCoord0 = vec2( (float) col / cols, fmod(((float)(row + _flying + 1) / rows ), 1.0 ));
+
+            vert.texCoord0 = vec2(col/cols, (row + 1)/rows);
             cpuVertexArray.push_back(vert);
             cpuIndexArray.push_back(2 * ((cols + 1) * newRow + col) + 1);
         }
