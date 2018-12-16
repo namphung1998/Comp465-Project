@@ -1,8 +1,9 @@
-#ifndef EXAMPLEAPP_H
-#define EXAMPLEAPP_H
+#ifndef APP_H
+#define APP_H
 
 #include <api/MinVR.h>
 using namespace MinVR;
+#include "Terrain.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -33,13 +34,13 @@ using namespace MinVR;
 #include <BasicGraphics.h>
 using namespace basicgraphics;
 
-class ExampleApp : public VRApp {
+class App : public VRApp {
 public:
     
     /** The constructor passes argc, argv, and a MinVR config file on to VRApp.
      */
-	ExampleApp(int argc, char** argv);
-    virtual ~ExampleApp();
+	App(int argc, char** argv);
+    virtual ~App();
 
     
     /** USER INTERFACE CALLBACKS **/
@@ -58,39 +59,42 @@ public:
 private:
 
 	std::unique_ptr<Box> _box;
-	float _angle;
-
-    int scl = 20;
-    int w = 2000;
-    int h = 1600;
-    int cols = w / scl;
-    int rows = h /scl;
-
-    float terrain[80][100];
-
-    float flying;
-
-    // std::vector<std::vector<float>> terrain;
+	float _flying;
+    bool paused;
 
 	double _lastTime;
 	double _curFrameTime;
 
 	virtual void reloadShaders();
 	GLSLProgram _shader;
+    GLSLProgram _normalShader;
+    
+    void setupGeometry();
+    
+    glm::mat4 viewportMat;
 
 	void initializeText();
 	void drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth);
 	struct FONScontext* fs;
 	GLSLProgram _textShader;
+    std::shared_ptr<Terrain> terrain;
 
-    void setupGeometry();
-
+    std::shared_ptr<basicgraphics::Texture> _normalMap;
+    
+    
 protected:
+    
     std::vector< std::shared_ptr<basicgraphics::Texture> > textures;
     std::vector<basicgraphics::Mesh::Vertex> cpuVertexArray;
     std::vector<int> cpuIndexArray;
     std::unique_ptr<basicgraphics::Mesh> mesh;
+
+    shared_ptr<Texture> tex;
+    
+    
 };
 
 
-#endif //EXAMPLEAPP_H
+
+
+#endif

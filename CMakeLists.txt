@@ -26,7 +26,7 @@ AutoBuild_init()
 
 #---------------------- Source for this Project ----------------------
 
-project(basicgraphics-example)
+project(terrain-generation)
 
 message(STATUS "==== BUILDING ${PROJECT_NAME}")
 message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
@@ -35,15 +35,28 @@ message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 set(source_files
   src/main.cpp
-  src/ExampleApp.cpp
+  src/App.cpp
+  src/Terrain.cpp
 )
 
 set(header_files
-  src/ExampleApp.h
+  src/App.h
+  src/Terrain.h
 )
 
 set(extra_files
   README.md
+  resources/BlinnPhong.frag
+  resources/BlinnPhong.geom
+  resources/BlinnPhong.vert
+  resources/textRendering.vert
+  resources/textRendering.frag
+  resources/texture.vert
+  resources/texture.frag
+  resources/sand-normal.jpg
+  resources/sand-normal2.jpg
+  resources/sand.frag
+  resources/sand2.jpeg
 )
 
 set_source_files_properties(${extra_files} PROPERTIES HEADER_FILE_ONLY TRUE)
@@ -100,10 +113,10 @@ if (WIN32)
 endif(WIN32)
 
 #copy resource files to build folder so that the executable can find them in the working directory
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-#                       ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#					   )
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:${PROJECT_NAME}>
+					   )
 			
 #copy the basic graphics resources to the build directory			
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
