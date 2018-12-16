@@ -42,3 +42,6 @@ cmake-gui ..
 ```
 
 CMake will walk you through the process of generating project files for development and testing on your system.
+
+## 3. Future Directions
+In the future, there are a number of avenues that we plan on exploring. Firstly, we would like to implement a gameplay component. We had initially planned on creating a game with the terrain generation as a background feature, and while this became an interesting stand-alone project, we plan on implementing a game that the user could play in the foreground. Additionally, while we believe we have a reasonably good depiction of a sandy terrain, we would like to explore methods of making it look even more realistic. These could include bump mapping, normal mapping, or uaing a realistic sandy texture as opposed to simply a color that is consistent with sand. 
